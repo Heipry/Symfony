@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="container">
+<div class="row">
+<div class="col-sm-12 col-md-8">
+<!-- Listar articulos -->
+{% for noticia in noticias%}
+<div class="article-container my-1">
+<!-- General la url de la noticia con la función path a
+partir de los datos que tenemos para ir a la página de la noticia -->
+<a href="{{ path('verNoticia', {'seccion':noticia.seccion,'slug':noticia.textoTitular}) }}">
+<!-- Icono noticia -->
+<img class="article-img" src="{{ asset('images/tenis.png')}}">
+<div class="article-title d-inline-block pl-3 align-middle">
+<!-- Sección de la noticia -->
+<span>{{ titulo }}</span>
+<br>
+<!-- Fecha de la noticia -->
+<span class="pl-5 article-details float-right"> {{noticia.fecha }}</span>
+</div>
+</a>
+</div>
+<!-- H1 Artículo -->
+<!-- General la url de la noticia con la función path a partir
+de los datos que tenemos para ir a la página de la noticia -->
+<a class="main-article-link" href="{{ path('verNoticia', {'seccion':noticia.seccion, 'slug':noticia.textoTitular}) }}">
+<div class="main-article mb-5 pb-3">
+<!-- Imagen de la noticia -->
+<img src="{{ asset('images/noticias.jpg') }}"
+
+alt="meteor shower">
+<!-- Titular de la noticia -->
+<h1 class="text-center mt-2">{{
+noticia.textoTitular|replace({'-': " "})}}</h1>
+</div>
+</a>
+{% else %}
+No se han encontrado noticias!
+{% endfor %}
+</div>
+</div>
+</div>
+{% endblock %}

@@ -11,7 +11,7 @@ class DeportesController extends Controller {
      * @Route("/")
      */
     public function inicio() {
-        return new Response('Mi pagina de deportes!');
+        return $this->render("base.html.twig");
     }
     /**
      * @Route("/deportes/cargarbd", name="noticia" )
@@ -62,9 +62,9 @@ class DeportesController extends Controller {
 
     /**
      * @Route("/deportes/{seccion}/{pagina}", name="lista_paginas", requirements={"pagina"="\d+"},
-     *     defaults={"seccion":"tenis"})))
+     *     defaults={"pagina":"tenis"})))
      */
-    public function lista($seccion, $pagina=1)
+    public function lista($seccion, $pagina = 1)
     {
         $em=$this->getDoctrine()->getManager();
         $repository = $this->getDoctrine()->getRepository(Noticia::class);
@@ -76,16 +76,30 @@ class DeportesController extends Controller {
         }
         // Almacenamos todas las noticias de una sección en una lista
         $noticias = $repository->findBy(["seccion"=>$seccion]);
-        return new Response("Hay un total de ".count($noticias)." noticias de la sección de ".$seccion);
+        return $this->render('noticia/listar.html.twig', [
+                // La función str_replace elimina los símbolos - de los títulos
+                'titulo' => ucwords(str_replace('-', ' ', $seccion)),
+                'noticias'=>$noticias
+                ]);
     }
     /**
-     * @Route("/deportes/{seccion}/{slug} ",
+     * @Route("/deportes/{seccion}/{slug}", name="verNoticia",
      * defaults={"seccion":"tenis"})
      */
     public function noticia($slug, $seccion) {
-        return new Response(sprintf(
-            'Noticia de %s, con url dinámica=%s',
-            $seccion, $slug));
+       $em=$this->getDoctrine()->getManager();
+       $repository = $this->getDoctrine()->getRepository(Noticia::class);
+       $noticia = $repository->findOneBy(['textoTitular' => $slug]);
+       //no noticia error 404
+        if (!$noticia){
+            //throw $this->createNotFoundException('Error 404: El deporte no está en la base de datos');
+            return $this->render("base.html.twig",['texto'=>"Error 404 Pagina no encontrada"]);
+        }
+        return $this->render('noticia/noticia.html.twig', [
+            //Parser del titulo para quitar guiones
+            'titulo' => ucwords(str_replace('-', ' ', $slug)),
+            'noticias' => $noticia
+        ]);
     }
 
     /**
