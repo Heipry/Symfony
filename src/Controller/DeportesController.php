@@ -11,7 +11,7 @@ class DeportesController extends Controller {
      * @Route("/")
      */
     public function inicio() {
-        return $this->render("base.html.twig");
+        return $this->render("base.html.twig", ['texto' => "Mi página de deportes!!"]);
     }
     /**
      * @Route("/deportes/cargarbd", name="noticia" )
@@ -172,4 +172,12 @@ class DeportesController extends Controller {
         return new Response(sprintf('Mi articulo en mi pagina de deportes: ruta %s',$slug));
     }
 
+    /**
+     * @Route("/logout", name="app_logout", methods={"GET"})
+     */
+    public function logout()
+    {
+        // controller can be blank: it will never be executed!
+
+    }
 }

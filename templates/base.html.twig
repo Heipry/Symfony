@@ -47,9 +47,17 @@ NOTICIAS DE UNA SECCIÓN -->
 <img class="nav-profile-img rounded-circle" src="images/runner.png">
 </a>
 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-<a class="dropdown-item" href="#">Perfil</a>
-<a class="dropdown-item" href="#">Crear Post</a>
-<a class="dropdown-item" href="#">Logout</a>
+    <a class="dropdown-item" href="#">{{ 'Perfil'| trans }}</a>
+    <a class="dropdown-item" href="#">{{ 'Crear Noticia'| trans }}</a>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <a class="dropdown-item" href="/logout">
+                {{ 'LogOut'| trans }}
+            </a>
+            {% else %}
+                <a class="dropdown-item" href="/user">
+            {{ 'LogIn'| trans }}
+                </a>
+        {% endif %}
 
 </div>
 </li>
@@ -60,13 +68,12 @@ NOTICIAS DE UNA SECCIÓN -->
     <!-- AÑADIR TEXTO EN EL CUERPO DE NUESTRA PÁGINA -->
 
     <div class="container text-center">
-    <h1 class="text-muted">
-        {% if texto is defined %}
-        {{ texto }}
-        {% else %}
-        Mi página de deportes
+        <h1 class="text-muted"> {{ texto | trans }}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {{'Bienvenido' | trans}}
+            {{ app.user.username}}
         {% endif %}
-    </h1>
+        </h1>
     </div>
 {% endblock %}
 <footer class="footer">
